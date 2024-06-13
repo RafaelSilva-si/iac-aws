@@ -1,0 +1,8 @@
+- hosts: 'terraform-ansible' # nome do grupo de hosts
+  tasks:
+    - name: criando o arquivo # nome da tarefa
+      copy:
+        dest: /home/ubuntu/index.html # nome do arquivo
+        content: <h1>eeeey amor</h1> # conteudo do arquivo
+    - name: criando o servidor
+      shell: 'nohup busybox httpd -f -p 8080 &'

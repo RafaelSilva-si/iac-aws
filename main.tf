@@ -9,14 +9,14 @@ terraform {
 }
 
 provider "aws" {
-  region  = "us-west-2"
+  region  = "us-west-2" # Região onde a instância irá rodar.
 }
 
 resource "aws_instance" "app_server" {
-  ami           = "ami-0cf2b4e024cdb6960"
-  instance_type = "t2.micro"
-  key_name = "iac-alura"
+  ami           = "ami-0cf2b4e024cdb6960"  # AMI do serviço que será instalado na instância
+  instance_type = "t2.micro" # Tipo da instância
+  key_name = "iac-alura" # Nome da Chave de Acesso
   tags = {
-    Name = "Segunda Instancia"
+    Name = "Instancia Pro" # Nome da instância
   }
 }
