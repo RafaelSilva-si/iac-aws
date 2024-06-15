@@ -1,8 +1,49 @@
 - hosts: 'terraform-ansible' # nome do grupo de hosts
   tasks:
-    - name: criando o arquivo # nome da tarefa
-      copy:
-        dest: /home/ubuntu/index.html # nome do arquivo
-        content: <h1>eeeey amor</h1> # conteudo do arquivo
-    - name: criando o servidor
-      shell: 'nohup busybox httpd -f -p 8080 &'
+    - name: Instalando dependências necessárias para adicionar novos repositórios
+      apt:
+        pkg:
+        - curl
+        - software-properties-common
+        update_cache: yes
+      become: yes
+
+    - name: Adicionando o repositório do NodeSource para Node.js 16.x
+      shell: |
+        curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+      become: yes
+
+    - name: Instalando o NodeJS e Git
+      apt:
+        pkg:
+        - nodejs
+        - git
+        update_cache: yes
+      become: yes
+
+    - name: Instalando http-server Globalmente
+      become: yes
+      npm:
+        name: http-server
+        global: yes
+        state: present
+
+    - name: Clonando o Repositorio
+      git:
+        repo: https://github.com/RafaelSilva-si/game-tracker-frontend-challenge.git
+        dest: /home/ubuntu/game-tracker-frontend
+
+    - name: Instalando dependencias
+      npm:
+        path: /home/ubuntu/game-tracker-frontend
+        state: present
+      
+    - name: Construindo App
+      shell: npm run build
+      args:
+        chdir: /home/ubuntu/game-tracker-frontend
+
+    - name: Executando Http-Server
+      shell: sudo http-server -p 80 /home/ubuntu/game-tracker-frontend/dist > /dev/null 2>&1 &
+      async: 60
+      poll: 0

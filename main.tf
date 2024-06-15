@@ -17,6 +17,6 @@ resource "aws_instance" "app_server" {
   instance_type = "t2.micro" # Tipo da instância
   key_name = "iac-alura" # Nome da Chave de Acesso
   tags = {
-    Name = "Instancia Pro" # Nome da instância
+    Name = "game-tracker-frontend" # Nome da instância
   }
 }
